@@ -1,0 +1,29 @@
+name: Test Action
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Send Mail
+        if: always()
+        uses: ./
+        with:
+          service: '${{ secrets.MAIL_SERVICE }}'
+          user: '${{ secrets.MAIL_USER }}'
+          pass: '${{ secrets.MAIL_PASS }}'
+          from: '${{ secrets.MAIL_FROM }}'
+          to: '${{ secrets.MAIL_TO }}'
+          subject: '${{ github.repository }} Project Build Results'
+          text: |
+            Status:
+            ${{ job.status }}
+
+            Data:
+            ${{ toJson(github) }}
