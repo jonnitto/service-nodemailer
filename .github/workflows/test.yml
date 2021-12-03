@@ -13,6 +13,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
       - name: Send single email
+        uses: ./
         with:
           service: '${{ secrets.MAIL_SERVICE }}'
           user: '${{ secrets.MAIL_USER }}'
@@ -27,6 +28,7 @@ jobs:
             Data:
             ${{ toJson(github) }}
       - name: Send multiple emails
+        uses: ./
         with:
           service: '${{ secrets.MAIL_SERVICE }}'
           user: '${{ secrets.MAIL_USER }}'
