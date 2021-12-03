@@ -32,6 +32,13 @@ inputs:
   bcc:
     description: 'Comma separated list or an array of recipients email addresses that will appear on the Bcc: field'
     required: false
+  replyTo:
+    description: 'An email address that will appear on the Reply-To: field'
+    required: false
+  priority:
+    description: Sets message importance headers, either "high", "normal" (default) or "low".
+    default: normal
+    required: false
   subject:
     description: The subject of the email
     default: Github Actions

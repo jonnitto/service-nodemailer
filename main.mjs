@@ -29,6 +29,8 @@ const data = {
   subject: core.getInput('subject', { required: true }),
   text: core.getInput('text', { required: false }),
   html: core.getInput('html', { required: false }),
+  priority: core.getInput('priority', { required: false }),
+  replyTo: core.getInput('replyTo', { required: false }),
 };
 
 const prefix = 'file://';

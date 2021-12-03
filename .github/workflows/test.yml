@@ -15,6 +15,8 @@ jobs:
       - name: Send single email
         uses: ./
         with:
+          replyTo: hello@account.pro
+          priority: high
           service: '${{ secrets.MAIL_SERVICE }}'
           user: '${{ secrets.MAIL_USER }}'
           pass: '${{ secrets.MAIL_PASS }}'
@@ -30,6 +32,7 @@ jobs:
       - name: Send individual emails
         uses: ./
         with:
+          priority: low
           individual: true
           service: '${{ secrets.MAIL_SERVICE }}'
           user: '${{ secrets.MAIL_USER }}'
