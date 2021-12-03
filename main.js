@@ -75,6 +75,7 @@ const sendMail = (receipt, replaceName) => {
         ? replaceNameWithNameFromEmail(receipt, data.html)
         : data.html;
   }
+
   transport.sendMail(mailData, (error) => {
     if (error) {
       core.error(error);
@@ -83,9 +84,9 @@ const sendMail = (receipt, replaceName) => {
 };
 
 if (sendMultipleEmails) {
-  to.forEach((receipt) => sendMail(receipt, true));
+  data.to.forEach((receipt) => sendMail(receipt, true));
 } else {
-  sendMail(to, false);
+  sendMail(data.to, false);
 }
 
 const replaceNameWithNameFromEmail = (address, string) => {
