@@ -19,7 +19,7 @@ inputs:
   from:
     description: The email address of the sender
     required: false
-  sendMultipleEmails:
+  individual:
     description: Send multiple emails, and not all in one, (only for the to field, cc and bcc are always sent in the email)
     required: false
     default: false

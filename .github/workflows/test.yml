@@ -39,4 +39,4 @@ jobs:
           text: |
             Hello %name%
             I've sended multiple emails
-          sendMultipleEmails: true
+          individual: true

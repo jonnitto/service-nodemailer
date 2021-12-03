@@ -5,7 +5,7 @@ import { replaceNameWithNameFromEmail, normalizeAdresses } from './utils.mjs';
 const service = core.getInput('service', { required: true });
 const user = core.getInput('user', { required: true });
 const pass = core.getInput('pass', { required: true });
-const sendMultipleEmails = core.getBooleanInput('sendMultipleEmails', {
+const individual = core.getBooleanInput('individual', {
   required: false,
 });
 core.setSecret('pass');
@@ -64,7 +64,7 @@ const sendMail = (receipt, replaceName) => {
   });
 };
 
-if (sendMultipleEmails) {
+if (individual) {
   data.to.forEach((receipt) => sendMail(receipt, true));
 } else {
   sendMail(data.to, false);
