@@ -1,6 +1,6 @@
 import core from '@actions/core';
 import nodemailer from 'nodemailer';
-import { replacePlaceholder, normalizeAdresses } from './utils.mjs';
+import replacePlaceholder from './replacePlaceholder.mjs';
 
 const service = core.getInput('service', { required: true });
 const user = core.getInput('user', { required: true });
@@ -18,9 +18,10 @@ const options = {
   },
 };
 
-const receiptsArray = normalizeAdresses(
-  core.getInput('to', { required: true })
-);
+const receiptsArray = (core.getInput('to', { required: true }) || '')
+  .split(',')
+  .map((item) => item.trim())
+  .filter((item) => !!item);
 
 const data = {
   from: core.getInput('from', { required: false }) || user,
