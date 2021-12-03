@@ -4,6 +4,9 @@ const nodemailer = require('nodemailer');
 const service = core.getInput('service', { required: true });
 const user = core.getInput('user', { required: true });
 const pass = core.getInput('pass', { required: true });
+const sendMultipleEmails = core.getBooleanInput('sendMultipleEmails', {
+  required: false,
+});
 core.setSecret('pass');
 
 const options = {
@@ -14,9 +17,20 @@ const options = {
   },
 };
 
+let to = core.getInput('to', { required: true });
+
+if (!to.isArray()) {
+  if (typeof to === 'string') {
+    to.split(',')
+      .map((receipt) => receipt.trim())
+      .filter((receipt) => !!receipt);
+  } else {
+    to = [to];
+  }
+}
+
 const data = {
   from: core.getInput('from', { required: false }) || user,
-  to: core.getInput('to', { required: true }),
   cc: core.getInput('cc', { required: false }),
   bcc: core.getInput('bcc', { required: false }),
   subject: core.getInput('subject', { required: true }),
@@ -24,7 +38,12 @@ const data = {
   html: core.getInput('html', { required: false }),
 };
 
-core.saveState('serviceNodeMailer', { ...options, ...data });
+core.saveState('serviceNodeMailer', {
+  ...options,
+  ...data,
+  to,
+  sendMultipleEmails,
+});
 
 const prefix = 'file://';
 if (data.text.startsWith(prefix)) {
@@ -39,9 +58,42 @@ if (data.html.startsWith(prefix)) {
 }
 
 const transport = nodemailer.createTransport(options);
-transport.sendMail(data, (err, info) => {
-  if (err) {
-    core.error('err', err);
+const sendMail = (to, replaceName) => {
+  const mailData = { ...data };
+
+  if (replaceName) {
+    mailData.subject = replaceNameWithNameFromEmail(to, data.subject);
+    mailData.text = replaceNameWithNameFromEmail(to, data.text);
+    mailData.html = replaceNameWithNameFromEmail(to, data.html);
   }
-  core.notice('Email was sent successfully');
-});
+  transport.sendMail(
+    {
+      ...mailData,
+      to,
+    },
+    (error) => {
+      if (error) {
+        core.error(error);
+      }
+    }
+  );
+};
+
+if (sendMultipleEmails) {
+  to.forEach((receipt) => sendMail(receipt, true));
+} else {
+  sendMail(to, false);
+}
+
+const replaceNameWithNameFromEmail = (address, string) => {
+  let name = '';
+
+  if (typeof address === 'string') {
+    const split = address.split('<').map((item) => item.trim());
+    name = split.length == 1 ? '' : split[0];
+  } else if (typeof address === 'object' && address.name) {
+    name = address.name;
+  }
+
+  return string.replaceAll('%name%', name);
+};

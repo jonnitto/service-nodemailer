@@ -19,6 +19,10 @@ inputs:
   from:
     description: The email address of the sender
     required: false
+  sendMultipleEmails:
+    description: Send multiple emails, and not all in one, (only for the to field, cc and bcc are always sent in the email)
+    required: false
+    default: false
   to:
     description: 'Comma separated list or an array of recipients email addresses that will appear on the To: field'
     required: true

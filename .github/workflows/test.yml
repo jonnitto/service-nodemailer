@@ -12,9 +12,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
-      - name: Send Mail
-        if: always()
-        uses: ./
+      - name: Send single email
         with:
           service: '${{ secrets.MAIL_SERVICE }}'
           user: '${{ secrets.MAIL_USER }}'
@@ -28,3 +26,13 @@ jobs:
 
             Data:
             ${{ toJson(github) }}
+      - name: Send multiple emails
+        with:
+          service: '${{ secrets.MAIL_SERVICE }}'
+          user: '${{ secrets.MAIL_USER }}'
+          pass: '${{ secrets.MAIL_PASS }}'
+          from: '${{ secrets.MAIL_FROM }}'
+          to: '${{ secrets.MAIL_TO }}'
+          subject: '${{ github.repository }} %name% Project Build Results'
+          text: Hello %name%, i've sended multiple emails
+          sendMultipleEmails: true
