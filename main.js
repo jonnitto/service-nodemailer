@@ -58,18 +58,18 @@ if (data.html.startsWith(prefix)) {
 }
 
 const transport = nodemailer.createTransport(options);
-const sendMail = (to, replaceName) => {
+const sendMail = (receipt, replaceName) => {
   const mailData = { ...data };
 
   if (replaceName) {
-    mailData.subject = replaceNameWithNameFromEmail(to, data.subject);
-    mailData.text = replaceNameWithNameFromEmail(to, data.text);
-    mailData.html = replaceNameWithNameFromEmail(to, data.html);
+    mailData.subject = replaceNameWithNameFromEmail(receipt, data.subject);
+    mailData.text = replaceNameWithNameFromEmail(receipt, data.text);
+    mailData.html = replaceNameWithNameFromEmail(receipt, data.html);
   }
   transport.sendMail(
     {
       ...mailData,
-      to,
+      to: receipt,
     },
     (error) => {
       if (error) {
@@ -80,6 +80,7 @@ const sendMail = (to, replaceName) => {
 };
 
 if (sendMultipleEmails) {
+  core.notice(typeof to, to);
   to.forEach((receipt) => sendMail(receipt, true));
 } else {
   sendMail(to, false);
