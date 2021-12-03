@@ -17,20 +17,23 @@ const options = {
   },
 };
 
-let to = core.getInput('to', { required: true });
-
-if (!Array.isArray(to)) {
-  if (typeof to === 'string') {
-    to.split(',')
-      .map((receipt) => receipt.trim())
-      .filter((receipt) => !!receipt);
-  } else {
-    to = [to];
-  }
-}
-
 const data = {
   from: core.getInput('from', { required: false }) || user,
+  to: (() => {
+    const input = core.getInput('to', { required: true });
+    if (Array.isArray(input)) {
+      return input;
+    }
+
+    if (typeof to === 'string') {
+      return input
+        .split(',')
+        .map((receipt) => receipt.trim())
+        .filter((receipt) => !!receipt);
+    }
+
+    return [input];
+  })(),
   cc: core.getInput('cc', { required: false }),
   bcc: core.getInput('bcc', { required: false }),
   subject: core.getInput('subject', { required: true }),
@@ -41,7 +44,6 @@ const data = {
 core.saveState('serviceNodeMailer', {
   ...options,
   ...data,
-  to,
   sendMultipleEmails,
 });
 
@@ -60,27 +62,27 @@ if (data.html.startsWith(prefix)) {
 const transport = nodemailer.createTransport(options);
 const sendMail = (receipt, replaceName) => {
   const mailData = { ...data };
+  mailData.to = receipt;
 
   if (replaceName) {
     mailData.subject = replaceNameWithNameFromEmail(receipt, data.subject);
-    mailData.text = replaceNameWithNameFromEmail(receipt, data.text);
-    mailData.html = replaceNameWithNameFromEmail(receipt, data.html);
+    mailData.text =
+      typeof data.text === 'string'
+        ? replaceNameWithNameFromEmail(receipt, data.text)
+        : data.text;
+    mailData.html =
+      typeof data.html === 'string'
+        ? replaceNameWithNameFromEmail(receipt, data.html)
+        : data.html;
   }
-  transport.sendMail(
-    {
-      ...mailData,
-      to: receipt,
-    },
-    (error) => {
-      if (error) {
-        core.error(error);
-      }
+  transport.sendMail(mailData, (error) => {
+    if (error) {
+      core.error(error);
     }
-  );
+  });
 };
 
 if (sendMultipleEmails) {
-  core.notice(typeof to, to);
   to.forEach((receipt) => sendMail(receipt, true));
 } else {
   sendMail(to, false);
