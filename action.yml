@@ -20,8 +20,14 @@ inputs:
     description: The email address of the sender
     required: false
   to:
-    description: Comma separated list or an array of recipients email addresses
+    description: 'Comma separated list or an array of recipients email addresses that will appear on the To: field'
     required: true
+  cc:
+    description: 'Comma separated list or an array of recipients email addresses that will appear on the Cc: field'
+    required: false
+  bcc:
+    description: 'Comma separated list or an array of recipients email addresses that will appear on the Bcc: field'
+    required: false
   subject:
     description: The subject of the email
     default: Github Actions

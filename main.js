@@ -17,6 +17,8 @@ const options = {
 const data = {
   from: core.getInput('from', { required: false }) || user,
   to: core.getInput('to', { required: true }),
+  cc: core.getInput('cc', { required: false }),
+  bcc: core.getInput('bcc', { required: false }),
   subject: core.getInput('subject', { required: true }),
   text: core.getInput('text', { required: false }),
   html: core.getInput('html', { required: false }),
