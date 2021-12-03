@@ -36,5 +36,7 @@ jobs:
           from: '${{ secrets.MAIL_FROM }}'
           to: '${{ secrets.MAIL_TO }}'
           subject: '${{ github.repository }} %name% Project Build Results'
-          text: Hello %name%, i've sended multiple emails
+          text: |
+            Hello %name%
+            I've sended multiple emails
           sendMultipleEmails: true
