@@ -26,4 +26,4 @@ const normalizeAdresses = (addresses) => {
   return [addresses];
 };
 
-export { replaceNameWithNameFromEmail, normalizeAdresses
+export { replaceNameWithNameFromEmail, normalizeAdresses };
