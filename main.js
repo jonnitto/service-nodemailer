@@ -19,7 +19,7 @@ const options = {
 
 let to = core.getInput('to', { required: true });
 
-if (!to.isArray()) {
+if (!Array.isArray(to)) {
   if (typeof to === 'string') {
     to.split(',')
       .map((receipt) => receipt.trim())
