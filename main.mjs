@@ -28,8 +28,6 @@ const data = {
   html: core.getInput('html', { required: false }),
 };
 
-core.saveState('serviceNodeMailer', process.pid);
-
 const prefix = 'file://';
 if (data.text.startsWith(prefix)) {
   data.text = {
