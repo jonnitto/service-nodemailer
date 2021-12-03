@@ -1,5 +1,6 @@
-const core = require('@actions/core');
-const nodemailer = require('nodemailer');
+import core from '@actions/core';
+import nodemailer from 'nodemailer';
+import { replaceNameWithNameFromEmail, normalizeAdresses } from './utils';
 
 const service = core.getInput('service', { required: true });
 const user = core.getInput('user', { required: true });
@@ -19,21 +20,7 @@ const options = {
 
 const data = {
   from: core.getInput('from', { required: false }) || user,
-  to: (() => {
-    const input = core.getInput('to', { required: true });
-    if (Array.isArray(input)) {
-      return input;
-    }
-
-    if (typeof to === 'string') {
-      return input
-        .split(',')
-        .map((receipt) => receipt.trim())
-        .filter((receipt) => !!receipt);
-    }
-
-    return [input];
-  })(),
+  to: normalizeAdresses(core.getInput('to', { required: true })),
   cc: core.getInput('cc', { required: false }),
   bcc: core.getInput('bcc', { required: false }),
   subject: core.getInput('subject', { required: true }),
@@ -88,16 +75,3 @@ if (sendMultipleEmails) {
 } else {
   sendMail(data.to, false);
 }
-
-const replaceNameWithNameFromEmail = (address, string) => {
-  let name = '';
-
-  if (typeof address === 'string') {
-    const split = address.split('<').map((item) => item.trim());
-    name = split.length == 1 ? '' : split[0];
-  } else if (typeof address === 'object' && address.name) {
-    name = address.name;
-  }
-
-  return string.replaceAll('%name%', name);
-};

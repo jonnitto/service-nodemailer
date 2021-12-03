@@ -1,7 +1,7 @@
 {
   "name": "service-nodemailer",
   "description": "Send email with the well known services from nodemailer",
-  "main": "main.js",
+  "main": "main.mjs",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jonnitto/service-nodemailer.git"
