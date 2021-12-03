@@ -1,14 +1,31 @@
-const replaceNameWithNameFromEmail = (address, string) => {
-  let name = '';
+const replaceItems = ({ string, name, email }) => {
+  if (!name) name = '';
+  if (!email) email = '';
 
-  if (typeof address === 'string') {
-    const split = address.split('<').map((item) => item.trim());
-    name = split.length == 1 ? '' : split[0];
-  } else if (typeof address === 'object' && address.name) {
-    name = address.name;
+  return string
+    .replaceAll('%name%', name.trim())
+    .replaceAll('%email%', email.trim());
+};
+
+const replacePlaceholder = (recipient, string) => {
+  if (typeof recipient === 'string') {
+    const split = recipient.split('<').map((item) => item.trim());
+
+    // Only the email address is given
+    if (split.length === 1) {
+      return replaceItems({ string, email: split[0] });
+    }
+
+    return replaceItems({
+      string,
+      name: split[0],
+      email: split[1].replace('>', ''),
+    });
   }
 
-  return string.replaceAll('%name%', name);
+  const name = recipient?.name || '';
+  const email = recipient?.address || '';
+  return replaceItems({ string, name, email });
 };
 
 const normalizeAdresses = (addresses) => {
@@ -26,4 +43,4 @@ const normalizeAdresses = (addresses) => {
   return [addresses];
 };
 
-export { replaceNameWithNameFromEmail, normalizeAdresses };
+export { replacePlaceholder, normalizeAdresses };

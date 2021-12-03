@@ -1,6 +1,6 @@
 import core from '@actions/core';
 import nodemailer from 'nodemailer';
-import { replaceNameWithNameFromEmail, normalizeAdresses } from './utils.mjs';
+import { replacePlaceholder, normalizeAdresses } from './utils.mjs';
 
 const service = core.getInput('service', { required: true });
 const user = core.getInput('user', { required: true });
@@ -18,9 +18,12 @@ const options = {
   },
 };
 
+const receiptsArray = normalizeAdresses(
+  core.getInput('to', { required: true })
+);
+
 const data = {
   from: core.getInput('from', { required: false }) || user,
-  to: normalizeAdresses(core.getInput('to', { required: true })),
   cc: core.getInput('cc', { required: false }),
   bcc: core.getInput('bcc', { required: false }),
   subject: core.getInput('subject', { required: true }),
@@ -46,14 +49,14 @@ const sendMail = (receipt, replaceName) => {
   mailData.to = receipt;
 
   if (replaceName) {
-    mailData.subject = replaceNameWithNameFromEmail(receipt, data.subject);
+    mailData.subject = replacePlaceholder(receipt, data.subject);
     mailData.text =
       typeof data.text === 'string'
-        ? replaceNameWithNameFromEmail(receipt, data.text)
+        ? replacePlaceholder(receipt, data.text)
         : data.text;
     mailData.html =
       typeof data.html === 'string'
-        ? replaceNameWithNameFromEmail(receipt, data.html)
+        ? replacePlaceholder(receipt, data.html)
         : data.html;
   }
 
@@ -65,7 +68,7 @@ const sendMail = (receipt, replaceName) => {
 };
 
 if (individual) {
-  data.to.forEach((receipt) => sendMail(receipt, true));
+  receiptsArray.forEach((receipt) => sendMail(receipt, true));
 } else {
-  sendMail(data.to, false);
+  sendMail(receiptsArray, false);
 }

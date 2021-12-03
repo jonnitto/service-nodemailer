@@ -27,9 +27,10 @@ jobs:
 
             Data:
             ${{ toJson(github) }}
-      - name: Send multiple emails
+      - name: Send individual emails
         uses: ./
         with:
+          individual: true
           service: '${{ secrets.MAIL_SERVICE }}'
           user: '${{ secrets.MAIL_USER }}'
           pass: '${{ secrets.MAIL_PASS }}'
@@ -38,5 +39,4 @@ jobs:
           subject: '${{ github.repository }} %name% Project Build Results'
           text: |
             Hello %name%
-            I've sended multiple emails
-          individual: true
+            I've sended multiple emails individual. Your address ist %email%.
