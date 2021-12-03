@@ -1,6 +1,6 @@
 import core from '@actions/core';
 import nodemailer from 'nodemailer';
-import { replaceNameWithNameFromEmail, normalizeAdresses } from './utils';
+import { replaceNameWithNameFromEmail, normalizeAdresses } from './utils.mjs';
 
 const service = core.getInput('service', { required: true });
 const user = core.getInput('user', { required: true });
