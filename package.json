@@ -1,0 +1,23 @@
+{
+  "name": "service-nodemailer",
+  "description": "Send email with the well known services from nodemailer",
+  "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jonnitto/service-nodemailer.git"
+  },
+  "author": "Jon Uhlmann <hello@uhlmann.pro>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jonnitto/service-nodemailer/issues"
+  },
+  "keywords": [
+    "github",
+    "actions",
+    "nodemailer"
+  ],
+  "dependencies": {
+    "@actions/core": "^1.6.0",
+    "nodemailer": "^6.7.2"
+  }
+}

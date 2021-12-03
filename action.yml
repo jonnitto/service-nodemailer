@@ -1,0 +1,38 @@
+name: Send email with a specific service
+description: Send email with the well known services from nodemailer
+author: Jon Uhlmann <hello@uhlmann.pro>
+branding:
+  icon: mail
+  color: blue
+
+inputs:
+  service:
+    description: Name of the service described at https://nodemailer.com/smtp/well-known
+    default: iCloud
+    required: true
+  user:
+    description: Username
+    required: true
+  pass:
+    description: Password
+    required: true
+  from:
+    description: The email address of the sender
+    required: false
+  to:
+    description: Comma separated list or an array of recipients email addresses
+    required: true
+  subject:
+    description: The subject of the email
+    default: Github Actions
+    required: true
+  text:
+    description: 'The plaintext version of the message as an Unicode string, Buffer, Stream or an attachment-like object ({path: "/var/data/…"})'
+    required: false
+  html:
+    description: 'The HTML version of the message as an Unicode string, Buffer, Stream or an attachment-like object ({path: "http://…"})'
+    required: false
+
+runs:
+  using: node16
+  main: main.js
