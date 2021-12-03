@@ -28,10 +28,7 @@ const data = {
   html: core.getInput('html', { required: false }),
 };
 
-core.saveState(
-  'serviceNodeMailer',
-  1638550897439 + (sendMultipleEmails ? 1 : 0)
-);
+core.saveState('serviceNodeMailer', process.pid);
 
 const prefix = 'file://';
 if (data.text.startsWith(prefix)) {
